@@ -1,6 +1,6 @@
 [TOC]
 
-# 一键在电脑本地Docker跑起来
+# 一键让项目在电脑本地Docker跑起来
 
 在电脑`cmd`或`Power Shell`命令窗口里均能跑起来，这里推荐`cmd`窗口。
 
@@ -47,7 +47,7 @@ mkdir output | Out-Null
 
 一般来说，项目部署在本地，想要跑起来还需要根据自己的行为习惯微调。
 
-在此项目背景下，需要微调的是 .\docker\.env 文件与 .\config\config.yaml 文件，如下图：
+在此项目背景下，需要微调的是 `.\docker\.env` 文件与 `.\config\config.yaml` 文件，如下图：
 
 ![image-20260118214721749](Docker本地运行指南.assets/image-20260118214721749.png)
 
@@ -171,7 +171,7 @@ docker compose up -d
 
 
 
------------------------------------------------------------------------答疑解惑区-------------------------------------------------------------
+-------------------------------------------------------------------答疑解惑区-------------------------------------------------------------
 
 **远程存储（S3_\*）是干嘛的？桌面端要配吗？**
 
@@ -235,3 +235,110 @@ git push
 结论：GitHub Desktop 非必需，命令行最快。
 
 ![image-20260118215814077](Docker本地运行指南.assets/image-20260118215814077.png)
+
+![image-20260118220245593](Docker本地运行指南.assets/image-20260118220245593.png)
+
+![image-20260118220724783](Docker本地运行指南.assets/image-20260118220724783.png)
+
+遇见问题：`git push` 后会默认推到作者仓库。是因为你本地仓库的 **remote `origin` 指向了 `https://github.com/sansan0/TrendRadar.git`**（也就是你 clone 时的来源）。你对作者仓库没写权限，所以 403 是正常的（没有权限）。
+
+1) 先确认你现在的 origin 指到哪里
+
+在项目根目录执行：
+
+```bash
+git remote -v
+```
+
+如果看到 `origin  https://github.com/sansan0/TrendRadar.git`，那就解释了为什么 push 去作者仓库。
+
+2) 把 origin 改成你自己的 fork（推荐做法）
+
+把 `<YOUR_GH>` 换成你的 GitHub 用户名：
+
+```bash
+git remote set-url origin https://github.com/Vanilla-Kevin/TrendRadar.git
+```
+
+可选：把作者仓库加成 `upstream`（以后用来同步更新）
+
+```bash
+git remote add upstream https://github.com/sansan0/TrendRadar.git
+```
+
+3) `git push -u origin main` 是什么意思
+
+- `origin`：远端名（默认远端的别名）
+- `main`：你要推送的本地分支名
+- `-u`：设置“上游/跟踪分支”（upstream tracking），以后你在这个分支上直接 `git push`/`git pull` 就会默认对着 `origin/main`。
+
+4) 你现在本地分支是 master，怎么推到 fork？
+
+你现在 `git branch` 显示是 `master`。有三种做法，选一个：
+
+方案 A：fork 也是 master（最简单）
+
+```bash
+git push -u origin master
+```
+
+方案 B：fork 默认分支是 main（推荐统一成 main
+
+```bash
+git branch -M main
+git push -u origin main
+```
+
+方案 C：本地保留 master，但推到远端 main
+
+```bash
+git push -u origin master:main
+```
+
+5) 你改了很多文件：要不要一个文件一个 commit？
+
+不需要。原则是：**一次 commit 可以包含多个文件**（只要它们属于同一批逻辑改动）。
+ 关键点：`git push` **只会上传已 commit 的提交**，不会上传你工作区里未提交的修改。
+
+最常用的一次性流程：
+
+```bash
+git status
+git add -A
+git commit -m "update TrendRadar config"
+git push   # 如果前面用了 -u 设置过上游，这里就够了
+```
+
+6) **重要提醒（避免把密钥推上去）**
+
+像 `.env` 里的 `webhook`、`API key` 建议别提交到仓库；要么放到 `.gitignore`，要么只提交模板不提交真实值（否则泄露风险很高）。
+
+## 为了避免泄露，记录下关键部分
+
+\# 飞书机器人 webhook URL（多账号用 ; 分隔）
+
+FEISHU_WEBHOOK_URL=https://open.feishu.cn/open-apis/bot/v2/hook/566fa926-bb7e-42be-b69e-c7aac0efab96
+
+\# 钉钉机器人 webhook URL（多账号用 ; 分隔）
+
+DINGTALK_WEBHOOK_URL=https://oapi.dingtalk.com/robot/send?access_token=d0006c98c608133cf12b9469e3fee276aa9c1bb7b7b06429f92ee0493194e48c
+
+\# 是否启用 AI 分析 (true/false)
+
+AI_ANALYSIS_ENABLED=true
+
+\# AI API Key（必填，启用 AI 功能时需要）
+
+AI_API_KEY=AIzaSyCMWevBPK3h0sY4j8PuomLEmY6fmdeazaw
+
+\# AI 提供商 (deepseek|openai|gemini|custom)
+
+AI_PROVIDER=gemini
+
+\# 模型名称
+
+AI_MODEL=gemini-3-flash-preview
+
+\# 自定义 API 端点（使用 custom 提供商时必填）
+
+AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/

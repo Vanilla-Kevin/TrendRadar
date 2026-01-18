@@ -328,15 +328,15 @@ ai:
   #   - openai: OpenAI
   #   - gemini: Google Gemini
   #   - custom: 自定义 OpenAI 兼容接口（需填写完整 base_url）
-  provider: "gemini"              # 提供商
-  api_key: "AIzaSyCMWevBPK3h0sY4j8PuomLEmY6fmdeazaw"    # API Key（建议使用环境变量 AI_API_KEY）
+  provider: "deepseek"              # 提供商
+  api_key: ""    # API Key（建议使用环境变量 AI_API_KEY）
 
-  # model: "deepseek-chat"            # 模型名称
-  model: "gemini-3-flash-preview"   # DeepSeek: deepseek-chat, deepseek-reasoner
+  model: "deepseek-chat"            # 模型名称
+  # model: ""   # DeepSeek: deepseek-chat, deepseek-reasoner
                                     # OpenAI: o3-mini, o1, gpt-4o
                                     # Gemini: gemini-2.5-flash, gemini-2.5-pro
 
-  base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"     # 完整 API 地址（可选）
+  base_url: ""     # 完整 API 地址（可选）
                                     # 留空则使用提供商默认端点
                                     # 其他提供商必须填写完整 URL
                                     # 示例: https://api.openai.com/v1/chat/completions
