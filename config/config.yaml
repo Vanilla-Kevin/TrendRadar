@@ -225,18 +225,18 @@ notification:
   #   执行时间不稳定，时间范围建议至少留足 2 小时
   # 💡 想要精准定时？建议使用 Docker 部署在个人服务器上
   push_window:
-    enabled: false                    # 是否启用推送时间窗口控制
-    start: "20:00"                    # 开始时间（北京时间）
-    end: "22:00"                      # 结束时间（北京时间）
-    once_per_day: true                # true=窗口内只推送一次，false=窗口内每次执行都推送
+    enabled: true                    # 是否启用推送时间窗口控制
+    start: "08:00"                    # 开始时间（北京时间）
+    end: "24:00"                      # 结束时间（北京时间）
+    once_per_day: false                # true=窗口内只推送一次，false=窗口内每次执行都推送
 
   # 推送渠道配置
   channels:
     feishu:
-      webhook_url: ""                 # 飞书机器人 webhook URL
+      webhook_url: "https://open.feishu.cn/open-apis/bot/v2/hook/566fa926-bb7e-42be-b69e-c7aac0efab96"                 # 飞书机器人 webhook URL
 
     dingtalk:
-      webhook_url: ""                 # 钉钉机器人 webhook URL
+      webhook_url: "https://oapi.dingtalk.com/robot/send?access_token=d0006c98c608133cf12b9469e3fee276aa9c1bb7b7b06429f92ee0493194e48c"                 # 钉钉机器人 webhook URL
 
     wework:
       webhook_url: ""                 # 企业微信机器人 webhook URL
@@ -328,26 +328,26 @@ ai:
   #   - openai: OpenAI
   #   - gemini: Google Gemini
   #   - custom: 自定义 OpenAI 兼容接口（需填写完整 base_url）
-  provider: "deepseek"              # 提供商
-  api_key: ""                       # API Key（建议使用环境变量 AI_API_KEY）
+  provider: "gemini"              # 提供商
+  api_key: "AIzaSyCMWevBPK3h0sY4j8PuomLEmY6fmdeazaw"    # API Key（建议使用环境变量 AI_API_KEY）
 
-  model: "deepseek-chat"            # 模型名称
-                                    # DeepSeek: deepseek-chat, deepseek-reasoner
+  # model: "deepseek-chat"            # 模型名称
+  model: "gemini-3-flash-preview"   # DeepSeek: deepseek-chat, deepseek-reasoner
                                     # OpenAI: o3-mini, o1, gpt-4o
                                     # Gemini: gemini-2.5-flash, gemini-2.5-pro
 
-  base_url: ""                      # 完整 API 地址（可选）
+  base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"     # 完整 API 地址（可选）
                                     # 留空则使用提供商默认端点
                                     # 其他提供商必须填写完整 URL
                                     # 示例: https://api.openai.com/v1/chat/completions
 
-  timeout: 90                       # 请求超时（秒）
+  timeout: 120                       # 请求超时（秒）
 
   # AI 参数配置
   temperature: 1.0                  # 采样温度 (0.0-2.0)
                                     # 注意：部分模型(如 gpt-5)可能要求必须为 1.0，否则会报错
 
-  max_tokens: 5000                  # 最大生成 token 数
+  max_tokens: 8000                  # 最大生成 token 数
                                     # 注意：如果 API 不支持此参数(报 HTTP 400)，请设为 0 以禁用发送
 
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -387,7 +387,7 @@ ai_analysis:
   prompt_file: "ai_analysis_prompt.txt"
 
   # 分析内容配置
-  max_news_for_analysis: 50         # 参与分析的新闻数量上限（控制成本关键项）
+  max_news_for_analysis: 60         # 参与分析的新闻数量上限（控制成本关键项）
                                     # 当前默认的【报告模式】是【当前榜单模式】（current），也就是只分析当前在热榜的新闻
                                     # 如果需要让报告呈现出更有参考价值的完整一天的趋势，且你的 token 充裕
                                       # 可开启 daily（当日汇总模式）
@@ -458,7 +458,7 @@ advanced:
     hotness: 0.1                      # 热度权重
 
   # 多账号限制
-  max_accounts_per_channel: 3         # 每个渠道最大账号数量
+  max_accounts_per_channel: 5         # 每个渠道最大账号数量
 
   # 消息分批大小（字节）- 内部配置，请勿修改
   batch_size:
