@@ -308,37 +308,3 @@ git add -A
 git commit -m "update TrendRadar config"
 git push   # 如果前面用了 -u 设置过上游，这里就够了
 ```
-
-6) **重要提醒（避免把密钥推上去）**
-
-像 `.env` 里的 `webhook`、`API key` 建议别提交到仓库；要么放到 `.gitignore`，要么只提交模板不提交真实值（否则泄露风险很高）。
-
-## 为了避免泄露，记录下关键部分
-
-\# 飞书机器人 webhook URL（多账号用 ; 分隔）
-
-FEISHU_WEBHOOK_URL=https://open.feishu.cn/open-apis/bot/v2/hook/566fa926-bb7e-42be-b69e-c7aac0efab96
-
-\# 钉钉机器人 webhook URL（多账号用 ; 分隔）
-
-DINGTALK_WEBHOOK_URL=https://oapi.dingtalk.com/robot/send?access_token=d0006c98c608133cf12b9469e3fee276aa9c1bb7b7b06429f92ee0493194e48c
-
-\# 是否启用 AI 分析 (true/false)
-
-AI_ANALYSIS_ENABLED=true
-
-\# AI API Key（必填，启用 AI 功能时需要）
-
-AI_API_KEY=AIzaSyCMWevBPK3h0sY4j8PuomLEmY6fmdeazaw
-
-\# AI 提供商 (deepseek|openai|gemini|custom)
-
-AI_PROVIDER=gemini
-
-\# 模型名称
-
-AI_MODEL=gemini-3-flash-preview
-
-\# 自定义 API 端点（使用 custom 提供商时必填）
-
-AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
